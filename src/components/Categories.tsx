@@ -19,36 +19,38 @@ export default function CategoriesList({ categories, photos }: Props) {
       <div
         className={`mt-20 mb-10 flex flex-1 flex-row gap-4 justify-center ${Styrinea.className}`}
       >
-        <div>
-          <a
-            onClick={(e) => {
-              e.preventDefault();
-              setSelectedCategory("");
-            }}
-            className={`text-md ${
-              selectedCategory === "" &&
-              "underline-offset-8 decoration-1 underline"
-            } hover:text-grey transition-colors duration-300 cursor-pointer tracking-widest`}
-          >
-            TODAS
-          </a>
-        </div>
-        {categories.map((el) => (
-          <div key={el.sys.id}>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10  text-center">
+          <div>
             <a
               onClick={(e) => {
                 e.preventDefault();
-                setSelectedCategory(el.sys.id);
+                setSelectedCategory("");
               }}
-              className={`text-md ${
-                selectedCategory === el.sys.id &&
+              className={`text-sm md:text-md ${
+                selectedCategory === "" &&
                 "underline-offset-8 decoration-1 underline"
-              } hover:text-grey transition-colors duration-300 cursor-pointer tracking-[0.05em]`}
+              } hover:text-grey transition-colors duration-300 cursor-pointer tracking-[0] md:tracking-[0.05em]`}
             >
-              {el.fields.name.toUpperCase()}
+              TODAS
             </a>
           </div>
-        ))}
+          {categories.map((el) => (
+            <div key={el.sys.id}>
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedCategory(el.sys.id);
+                }}
+                className={`text-sm md:text-md ${
+                  selectedCategory === el.sys.id &&
+                  "underline-offset-8 decoration-1 underline"
+                } hover:text-grey transition-colors duration-300 cursor-pointer tracking-[0] md:tracking-[0.05em]`}
+              >
+                {el.fields.name.toUpperCase()}
+              </a>
+            </div>
+          ))}
+        </div>
       </div>
 
       {photos && (

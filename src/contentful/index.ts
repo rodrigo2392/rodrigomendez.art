@@ -1,5 +1,5 @@
 import { createClient } from "contentful";
-import { Photo, Category } from "./types";
+import { Photo, Category, Section } from "./types";
 const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN || "";
 const space = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID || "";
 const environment = process.env.NEXT_PUBLIC__ENVIRONMENT || "";
@@ -28,11 +28,10 @@ export const getPhotos = async (category?: string, limit?: number) => {
   return response.items as unknown as Photo[];
 };
 
-export const getPhoto = async (id: string) => {
+export const getSections = async () => {
   const response = await client.getEntries({
-    content_type: "photo",
-    "fields.id": id,
+    content_type: "section",
   });
 
-  return response.items;
+  return response.items as unknown as Section[];
 };

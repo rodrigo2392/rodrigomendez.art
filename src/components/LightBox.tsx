@@ -81,7 +81,9 @@ export default function LightboxComponent({ images }: Props) {
         {images.map((el, index) => (
           <div
             key={el.sys.id}
-            className="px-2 mb-5 hover:opacity-50 cursor-pointer"
+            className={`${
+              el.fields.aspect === "horizontal" && "col-span-2"
+            } px-2 mb-5 hover:opacity-50 cursor-pointer`}
             onClick={() => {
               setCurrentIndex(index);
               setOpen(true);
@@ -108,7 +110,7 @@ export default function LightboxComponent({ images }: Props) {
                   ? 2048
                   : 1368
               }
-              className="w-full"
+              className="w-full h-full object-cover"
             />
           </div>
         ))}

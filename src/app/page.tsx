@@ -1,14 +1,14 @@
-import { getCategories, getPhotos } from "@/contentful";
+import { getCategories, getSections } from "@/contentful";
 import CategoriesList from "@/components/Categories";
 import localFont from "next/font/local";
-import Photos from "@/components/Photos";
+import Sections from "@/components/Sections";
 const Styrinea = localFont({ src: "./styrenea.woff2" });
 const FamilyNormal = localFont({ src: "./family-light.woff2" });
 const FamilyItalic = localFont({ src: "./family-light-italic.woff2" });
 
 export default async function Home() {
   const categories = await getCategories();
-  const photos = await getPhotos();
+  const sections = await getSections();
   return (
     <div className="pb-28 max-w-screen-2xl m-auto">
       <div className={`mt-4 flex flex-1 justify-center gap-2`}>
@@ -16,19 +16,22 @@ export default async function Home() {
         <h1 className={`text-text-h1  ${FamilyItalic.className}`}> Méndez</h1>
       </div>
 
-      <div
-        className={`hidden mt-5 md:flex flex-1 justify-center ${Styrinea.className}`}
-      >
+      <div className={`mt-5 flex flex-1 justify-center ${Styrinea.className}`}>
         <h1 className="text-4xl">FOTOGRAFÍA</h1>
       </div>
       {categories && <CategoriesList isMain categories={categories} />}
-      {photos && <Photos photos={photos} />}
-      <div className="border-b pb-8 md:pb-16 space-y-8 md:space-y-16"></div>
-      <div className="w-full text-center mt-10">
+
+      {sections
+        .sort((a, b) => a.fields.position - b.fields.position)
+        .map((el) => (
+          <Sections section={el} key={el.sys.id} />
+        ))}
+      <div className="pb-8 md:pb-16 space-y-8 md:space-y-16"></div>
+      <div className="w-full text-center">
         <h1 className={`text-4xl  ${Styrinea.className}`}>SOBRE MÍ</h1>
       </div>
       <div className="flex flex-1">
-        <div className={`text-2xl  ${Styrinea.className} mt-10`}>
+        <div className={` text-2xl  ${Styrinea.className} mt-10`}>
           <p className="px-6 text-xl xl:px-0">
             Soy Rodrigo Méndez, vivo en Guadalajara Jalisco México, soy un
             apasionado fotógrafo con 2 años de experiencia, especializado en

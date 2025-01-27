@@ -28,3 +28,17 @@ export interface Photo {
     createdAt: string;
   };
 }
+
+export interface Section {
+  fields: {
+    title: string;
+    photos: Photo[];
+    fitPosition: number;
+    position: number;
+    border: boolean;
+    category?: Category;
+  };
+  sys: {
+    id: string;
+  };
+}

@@ -89,7 +89,7 @@ export default function LightboxComponent({ images }: Props) {
           >
             <Image
               alt={el.fields.title}
-              loading="lazy"
+              loading="eager"
               src={`https:${el.fields.image.fields.file.url}`}
               placeholder="blur"
               blurDataURL={

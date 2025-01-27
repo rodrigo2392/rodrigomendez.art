@@ -10,7 +10,7 @@ const client = createClient({
   environment,
 });
 
-export const getCAtegories = async () => {
+export const getCategories = async () => {
   const response = await client.getEntries({
     content_type: "category",
   });
@@ -18,9 +18,10 @@ export const getCAtegories = async () => {
   return response.items as unknown as Category[];
 };
 
-export const getPhotos = async () => {
+export const getPhotos = async (category?: string) => {
   const response = await client.getEntries({
     content_type: "photo",
+    "fields.category.sys.id": category,
   });
 
   return response.items as unknown as Photo[];

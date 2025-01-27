@@ -1,64 +1,46 @@
 "use client";
-
-import { Category, Photo } from "@/contentful/types";
-import LightboxComponent from "@/components/LightBox";
-import { useState } from "react";
+import { Category } from "@/contentful/types";
 import localFont from "next/font/local";
+import Link from "next/link";
 
 interface Props {
   categories: Category[];
-  photos: Photo[];
+  isMain?: boolean;
+  currentId?: string;
 }
 
 const Styrinea = localFont({ src: "../app/styrenea.woff2" });
-export default function CategoriesList({ categories, photos }: Props) {
-  const [selectedCategory, setSelectedCategory] = useState("");
 
+export default function CategoriesList({
+  categories,
+  isMain,
+  currentId,
+}: Props) {
   return (
     <>
       <div
         className={`mt-20 mb-10 flex flex-1 flex-row gap-4 justify-center ${Styrinea.className}`}
       >
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10  text-center">
-          <div>
-            <a
-              onClick={(e) => {
-                e.preventDefault();
-                setSelectedCategory("");
-              }}
-              className={`text-sm md:text-md ${
-                selectedCategory === "" &&
-                "underline-offset-8 decoration-1 underline"
-              } hover:text-grey transition-colors duration-300 cursor-pointer tracking-[0] md:tracking-[0.05em]`}
-            >
-              TODAS
-            </a>
-          </div>
-          {categories.map((el) => (
+          {categories.map((el, index) => (
             <div key={el.sys.id}>
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  setSelectedCategory(el.sys.id);
-                }}
+              <Link
+                href={
+                  el.sys.id === "2EdUXN7bhIAFYTyZ5Gm0nn"
+                    ? `/`
+                    : `/category/${el.sys.id}`
+                }
                 className={`text-sm md:text-md ${
-                  selectedCategory === el.sys.id &&
+                  ((isMain && index === 0) || el.sys.id === currentId) &&
                   "underline-offset-8 decoration-1 underline"
                 } hover:text-grey transition-colors duration-300 cursor-pointer tracking-[0] md:tracking-[0.05em]`}
               >
                 {el.fields.name.toUpperCase()}
-              </a>
+              </Link>
             </div>
           ))}
         </div>
       </div>
-
-      {photos && (
-        <LightboxComponent
-          selectedCategory={selectedCategory}
-          images={photos}
-        />
-      )}
     </>
   );
 }

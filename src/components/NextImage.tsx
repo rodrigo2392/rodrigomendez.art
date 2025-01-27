@@ -53,10 +53,11 @@ export default function NextJsImage({
       <Image
         fill
         alt=""
-        src={slide.src}
+        src={`https:${slide.src}`}
         loading="eager"
         draggable={false}
-        placeholder={"blur"}
+        placeholder="blur"
+        blurDataURL={`https:${slide.src}?fit=thumb&w=50&h=50`}
         style={{
           objectFit: cover ? "cover" : "contain",
           cursor: click ? "pointer" : undefined,

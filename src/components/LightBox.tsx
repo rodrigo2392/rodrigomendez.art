@@ -5,54 +5,82 @@ import Image from "next/image";
 import NextJsImage from "@/components/NextImage";
 import { useEffect, useState } from "react";
 import { Photo } from "@/contentful/types";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 
 interface Props {
   images: Photo[];
-  selectedCategory: string;
+  wall?: boolean;
 }
 interface nextPhoto {
   src: string;
   width: number;
-  heoght: number;
+  height: number;
 }
-export default function LightboxComponent({ images, selectedCategory }: Props) {
+interface wallPhoto {
+  id: string | number;
+  src: string;
+  alt: string;
+}
+export default function LightboxComponent({ images, wall }: Props) {
   const [open, setOpen] = useState(false);
   const [photos, setPhotos] = useState<nextPhoto[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const newPhotos: nextPhoto[] = [];
-    images?.map((el) => {
-      const img = {
-        src: el.fields.image.fields.file.url,
-        width: 1200,
-        heoght: 1200,
-      };
-      newPhotos.push(img);
-    });
-    setPhotos(newPhotos);
+    if (typeof window !== undefined) {
+      const newPhotos: nextPhoto[] = [];
+      const newWallPhotos: wallPhoto[] = [];
+      images?.map((el) => {
+        const img = {
+          id: el.sys.id,
+          alt: el.fields.title ?? "",
+          src: `${el.fields.image.fields.file.url}`,
+          // 1368 * 2048
+          width:
+            el.fields.aspect === "horizontal" || el.fields.aspect === "square"
+              ? 2048
+              : 1368,
+          height:
+            el.fields.aspect === "vertical" || el.fields.aspect === "square"
+              ? 2048
+              : 1368,
+        };
+        newPhotos.push(img);
+        newWallPhotos.push(img);
+      });
+      setPhotos(newPhotos);
+    }
   }, [images]);
   return (
     <>
-      <Lightbox
-        open={open}
-        close={() => setOpen(false)}
-        slides={photos}
-        index={currentIndex}
-        render={{ slide: NextJsImage }}
-        className="bg-white"
-        styles={{
-          container: { backgroundColor: "rgba(255,255,255,0.8)" },
-          root: { backgroundColor: "rgba(255,255,255,0.1)" },
-          navigationNext: { color: "#000" },
-          navigationPrev: { color: "#000" },
-          button: { color: "#000" },
-        }}
-      />
-      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {images.map((el, index) =>
-          selectedCategory === "" ||
-          selectedCategory === el.fields.category.sys.id ? (
+      {typeof window !== undefined && (
+        <Lightbox
+          open={open}
+          close={() => setOpen(false)}
+          slides={photos}
+          index={currentIndex}
+          render={{ slide: NextJsImage }}
+          className="bg-white"
+          styles={{
+            container: { backgroundColor: "rgba(255,255,255,0.8)" },
+            root: { backgroundColor: "rgba(255,255,255,0.1)" },
+            navigationNext: { color: "#000" },
+            navigationPrev: { color: "#000" },
+            button: { color: "#000" },
+          }}
+          plugins={[Zoom, Fullscreen]}
+          fullscreen={{ auto: false }}
+          zoom={{
+            scrollToZoom: true,
+            maxZoomPixelRatio: 1,
+          }}
+        />
+      )}
+
+      {!wall && (
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {images.map((el, index) => (
             <div
               key={el.sys.id}
               className="px-4 mt-4 hover:opacity-50 cursor-pointer"
@@ -62,16 +90,32 @@ export default function LightboxComponent({ images, selectedCategory }: Props) {
               }}
             >
               <Image
-                alt={el.fields.titulo}
+                alt={el.fields.title}
+                loading="eager"
                 src={`https:${el.fields.image.fields.file.url}`}
-                width={1280}
-                height={1280}
+                placeholder="blur"
+                blurDataURL={
+                  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mOsa2yqBwAFCAICLICSyQAAAABJRU5ErkJggg=="
+                }
+                width={
+                  // 352 * 440
+                  el.fields.aspect === "horizontal" ||
+                  el.fields.aspect === "square"
+                    ? 440
+                    : 352
+                }
+                height={
+                  el.fields.aspect === "vertical" ||
+                  el.fields.aspect === "square"
+                    ? 440
+                    : 352
+                }
                 className="w-full"
               />
             </div>
-          ) : null
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }

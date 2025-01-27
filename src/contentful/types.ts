@@ -10,9 +10,10 @@ export interface Category {
 
 export interface Photo {
   fields: {
-    titulo: string;
+    title: string;
     description: string;
     slug: string;
+    aspect: "horizontal" | "vertical" | "square";
     image: {
       fields: {
         file: {

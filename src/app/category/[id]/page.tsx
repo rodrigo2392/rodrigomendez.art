@@ -6,9 +6,13 @@ const Styrinea = localFont({ src: "../../styrenea.woff2" });
 const FamilyNormal = localFont({ src: "../../family-light.woff2" });
 const FamilyItalic = localFont({ src: "../../family-light-italic.woff2" });
 
-export default async function Home({ params }: { params: { id: string } }) {
+type Params = Promise<{ id: string }>;
+
+export default async function Home(props: { params: Params }) {
+  const params = await props.params;
+  const catId = params.id;
   const categories = await getCategories();
-  const photos = await getPhotos(params.id);
+  const photos = await getPhotos(catId);
   return (
     <div className="pb-28 max-w-screen-2xl m-auto">
       <div className={`mt-4 flex flex-1 justify-center gap-2`}>

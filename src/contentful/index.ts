@@ -18,10 +18,11 @@ export const getCategories = async () => {
   return response.items as unknown as Category[];
 };
 
-export const getPhotos = async (category?: string) => {
+export const getPhotos = async (category?: string, limit?: number) => {
   const response = await client.getEntries({
     content_type: "photo",
     "fields.category.sys.id": category,
+    limit,
   });
 
   return response.items as unknown as Photo[];

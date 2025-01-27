@@ -19,9 +19,9 @@ export default function CategoriesList({
   return (
     <>
       <div
-        className={`mt-20 mb-10 flex flex-1 flex-row gap-4 justify-center ${Styrinea.className}`}
+        className={`mt-5 md:mt-20 md:mb-10 flex flex-1 flex-row gap-4 justify-center ${Styrinea.className}`}
       >
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10  text-center">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-10  text-center">
           {categories.map((el, index) => (
             <div key={el.sys.id}>
               <Link

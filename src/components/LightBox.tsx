@@ -10,7 +10,6 @@ import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 
 interface Props {
   images: Photo[];
-  wall?: boolean;
 }
 interface nextPhoto {
   src: string;
@@ -22,7 +21,7 @@ interface wallPhoto {
   src: string;
   alt: string;
 }
-export default function LightboxComponent({ images, wall }: Props) {
+export default function LightboxComponent({ images }: Props) {
   const [open, setOpen] = useState(false);
   const [photos, setPhotos] = useState<nextPhoto[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -78,44 +77,42 @@ export default function LightboxComponent({ images, wall }: Props) {
         />
       )}
 
-      {!wall && (
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {images.map((el, index) => (
-            <div
-              key={el.sys.id}
-              className="px-4 mt-4 hover:opacity-50 cursor-pointer"
-              onClick={() => {
-                setCurrentIndex(index);
-                setOpen(true);
-              }}
-            >
-              <Image
-                alt={el.fields.title}
-                loading="eager"
-                src={`https:${el.fields.image.fields.file.url}`}
-                placeholder="blur"
-                blurDataURL={
-                  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mOsa2yqBwAFCAICLICSyQAAAABJRU5ErkJggg=="
-                }
-                width={
-                  // 352 * 440
-                  el.fields.aspect === "horizontal" ||
-                  el.fields.aspect === "square"
-                    ? 440
-                    : 352
-                }
-                height={
-                  el.fields.aspect === "vertical" ||
-                  el.fields.aspect === "square"
-                    ? 440
-                    : 352
-                }
-                className="w-full"
-              />
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
+        {images.map((el, index) => (
+          <div
+            key={el.sys.id}
+            className="px-2 mb-5 hover:opacity-50 cursor-pointer"
+            onClick={() => {
+              setCurrentIndex(index);
+              setOpen(true);
+            }}
+          >
+            <Image
+              alt={el.fields.title}
+              loading="lazy"
+              src={`https:${el.fields.image.fields.file.url}`}
+              placeholder="blur"
+              blurDataURL={
+                "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mOsa2yqBwAFCAICLICSyQAAAABJRU5ErkJggg=="
+              }
+              width={
+                // 352 * 440
+                // 1368 * 2048
+                el.fields.aspect === "horizontal" ||
+                el.fields.aspect === "square"
+                  ? 2048
+                  : 1368
+              }
+              height={
+                el.fields.aspect === "vertical" || el.fields.aspect === "square"
+                  ? 2048
+                  : 1368
+              }
+              className="w-full"
+            />
+          </div>
+        ))}
+      </div>
     </>
   );
 }

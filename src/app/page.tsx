@@ -16,7 +16,9 @@ export default async function Home() {
         <h1 className={`text-text-h1  ${FamilyItalic.className}`}> Méndez</h1>
       </div>
 
-      <div className={`mt-5 flex flex-1 justify-center ${Styrinea.className}`}>
+      <div
+        className={`hidden mt-5 md:flex flex-1 justify-center ${Styrinea.className}`}
+      >
         <h1 className="text-4xl">FOTOGRAFÍA</h1>
       </div>
       {categories && <CategoriesList isMain categories={categories} />}
@@ -26,7 +28,7 @@ export default async function Home() {
         <h1 className={`text-4xl  ${Styrinea.className}`}>SOBRE MÍ</h1>
       </div>
       <div className="flex flex-1">
-        <div className={` text-2xl  ${Styrinea.className} mt-10`}>
+        <div className={`text-2xl  ${Styrinea.className} mt-10`}>
           <p className="px-6 text-xl xl:px-0">
             Soy Rodrigo Méndez, vivo en Guadalajara Jalisco México, soy un
             apasionado fotógrafo con 2 años de experiencia, especializado en
